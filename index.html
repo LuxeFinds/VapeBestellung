@@ -4,36 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bestellung - LuxeFinds</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: black;
+            background: linear-gradient(to bottom, #000, #222);
             color: gold;
             text-align: center;
             padding: 20px;
         }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        h1 {
+            font-size: 24px;
+        }
         input, button {
-            display: block;
-            margin: 10px auto;
+            width: 100%;
             padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
             font-size: 16px;
         }
-        canvas {
-            margin-top: 20px;
+        input {
+            background: #333;
+            color: white;
+        }
+        button {
+            background: gold;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ffd700;
         }
     </style>
 </head>
 <body>
-    <h1>LuxeFinds Bestellung</h1>
-    <p>40K Vape Puffs - Strawberry Cherry Bubblegum</p>
-    <form id="orderForm">
-        <input type="text" id="name" placeholder="Dein Name" required>
-        <input type="number" id="price" placeholder="Betrag in €" required>
-        <input type="date" id="date" required>
-        <button type="submit">Bestellen</button>
-    </form>
-    <canvas id="qrcode"></canvas>
+    <div class="container">
+        <h1>LuxeFinds Bestellung</h1>
+        <p>40K Vape Puffs - Strawberry Cherry Bubblegum</p>
+        <form id="orderForm">
+            <input type="text" id="name" placeholder="Dein Name" required>
+            <input type="number" id="price" placeholder="Betrag in €" required>
+            <input type="date" id="date" required>
+            <button type="submit">Bestellen</button>
+        </form>
+    </div>
     
     <script>
         document.getElementById('orderForm').addEventListener('submit', function(event) {
@@ -63,17 +86,10 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             }).then(() => {
-                alert("Bestellung gesendet!");
+                alert("✅ Bestellung erfolgreich gesendet!");
             }).catch(() => {
-                alert("Fehler beim Senden der Bestellung.");
+                alert("❌ Fehler beim Senden der Bestellung.");
             });
-        });
-
-        // QR-Code generieren
-        const qr = new QRious({
-            element: document.getElementById('qrcode'),
-            value: window.location.href,
-            size: 200
         });
     </script>
 </body>
