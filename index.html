@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellung - LuxeFinds</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #000, #222);
+            color: gold;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        h1 {
+            font-size: 24px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input {
+            background: #333;
+            color: white;
+        }
+        button {
+            background: gold;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>LuxeFinds Bestellung</h1>
+        <p>40K Vape Puffs - Strawberry Cherry Bubblegum</p>
+        <form id="orderForm">
+            <input type="text" id="name" placeholder="Dein Name" required>
+            <input type="number" id="price" placeholder="Betrag in €" required>
+            <input type="date" id="date" required>
+            <button type="submit">Bestellen</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const date = document.getElementById('date').value;
+            
+            const webhookUrl = "https://discord.com/api/webhooks/1323428153481236490/VnBnl7njS9O0z4h0UBguqcqX423jLmACEnQE1WU-OKBneYaRbW_SBTpuKP6feZqFyRG5";
+            
+            const payload = {
+                embeds: [{
+                    title: "Neue Bestellung ✅",
+                    color: 16766720,
+                    fields: [
+                        { name: "🛍️ Produkt", value: "40K Vape Puffs - Strawberry Cherry Bubblegum", inline: false },
+                        { name: "👤 Name", value: name, inline: true },
+                        { name: "💰 Betrag", value: price + "€", inline: true },
+                        { name: "📅 Datum", value: date, inline: false }
+                    ]
+                }]
+            };
+            
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert("✅ Bestellung erfolgreich gesendet!");
+            }).catch(() => {
+                alert("❌ Fehler beim Senden der Bestellung.");
+            });
+        });
+    </script>
+</body>
+</html>
