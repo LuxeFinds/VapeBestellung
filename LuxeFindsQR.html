@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellung - LuxeFinds</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: gold;
+            text-align: center;
+            padding: 20px;
+        }
+        input, button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+        canvas {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>LuxeFinds Bestellung</h1>
+    <p>40K Vape Puffs - Strawberry Cherry Bubblegum</p>
+    <form id="orderForm">
+        <input type="text" id="name" placeholder="Dein Name" required>
+        <input type="number" id="price" placeholder="Betrag in €" required>
+        <input type="date" id="date" required>
+        <button type="submit">Bestellen</button>
+    </form>
+    <canvas id="qrcode"></canvas>
+    
+    <script>
+        document.getElementById('orderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const price = document.getElementById('price').value;
+            const date = document.getElementById('date').value;
+            
+            const webhookUrl = "https://discord.com/api/webhooks/1323428153481236490/VnBnl7njS9O0z4h0UBguqcqX423jLmACEnQE1WU-OKBneYaRbW_SBTpuKP6feZqFyRG5";
+            
+            const payload = {
+                embeds: [{
+                    title: "Neue Bestellung ✅",
+                    color: 16766720,
+                    fields: [
+                        { name: "🛍️ Produkt", value: "40K Vape Puffs - Strawberry Cherry Bubblegum", inline: false },
+                        { name: "👤 Name", value: name, inline: true },
+                        { name: "💰 Betrag", value: price + "€", inline: true },
+                        { name: "📅 Datum", value: date, inline: false }
+                    ]
+                }]
+            };
+            
+            fetch(webhookUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert("Bestellung gesendet!");
+            }).catch(() => {
+                alert("Fehler beim Senden der Bestellung.");
+            });
+        });
+
+        // QR-Code generieren
+        const qr = new QRious({
+            element: document.getElementById('qrcode'),
+            value: window.location.href,
+            size: 200
+        });
+    </script>
+</body>
+</html>
