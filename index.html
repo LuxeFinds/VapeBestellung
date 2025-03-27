@@ -44,6 +44,13 @@
         button:hover {
             background: #ffd700;
         }
+        .date-display {
+            background: #333;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -53,18 +60,45 @@
         <form id="orderForm">
             <input type="text" id="name" placeholder="Dein Name" required>
             <input type="number" id="price" placeholder="Betrag in €" required>
-            <input type="date" id="date" required>
+            <div class="date-display" id="dateDisplay"></div>
             <button type="submit">Bestellen</button>
         </form>
     </div>
     
     <script>
+        let userIP = null;
+        let bestellteIPs = JSON.parse(localStorage.getItem("bestellteIPs")) || [];
+
+        // Aktuelles Datum holen und anzeigen
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString("de-DE");
+        document.getElementById('dateDisplay').innerText = "📅 Datum: " + formattedDate;
+
+        // IP-Adresse abrufen
+        fetch("https://api64.ipify.org?format=json")
+            .then(response => response.json())
+            .then(data => {
+                userIP = data.ip;
+            })
+            .catch(() => {
+                alert("⚠️ Konnte IP nicht abrufen.");
+            });
+
         document.getElementById('orderForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
+            if (!userIP) {
+                alert("⚠️ IP-Adresse konnte nicht geladen werden. Versuche es erneut.");
+                return;
+            }
+
+            if (bestellteIPs.includes(userIP)) {
+                alert("❌ Du hast bereits eine Bestellung aufgegeben!");
+                return;
+            }
+
             const name = document.getElementById('name').value;
             const price = document.getElementById('price').value;
-            const date = document.getElementById('date').value;
             
             const webhookUrl = "https://discord.com/api/webhooks/1323428153481236490/VnBnl7njS9O0z4h0UBguqcqX423jLmACEnQE1WU-OKBneYaRbW_SBTpuKP6feZqFyRG5";
             
@@ -76,7 +110,7 @@
                         { name: "🛍️ Produkt", value: "40K Vape Puffs - Strawberry Cherry Bubblegum", inline: false },
                         { name: "👤 Name", value: name, inline: true },
                         { name: "💰 Betrag", value: price + "€", inline: true },
-                        { name: "📅 Datum", value: date, inline: false }
+                        { name: "📅 Datum", value: formattedDate, inline: false }
                     ]
                 }]
             };
@@ -87,6 +121,8 @@
                 body: JSON.stringify(payload)
             }).then(() => {
                 alert("✅ Bestellung erfolgreich gesendet!");
+                bestellteIPs.push(userIP);
+                localStorage.setItem("bestellteIPs", JSON.stringify(bestellteIPs));
             }).catch(() => {
                 alert("❌ Fehler beim Senden der Bestellung.");
             });
