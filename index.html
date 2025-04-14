@@ -115,7 +115,7 @@
                     "🍋🍒 Lemon Cherry"
                 ],
                 images: [
-                    "Bild4_25k.png", // Bild 1 für 25       
+                    "Bild4_25k.png" // Nur Bilder für 25k
                 ]
             },
             "30k": {
@@ -176,13 +176,8 @@
             images.forEach(image => {
                 const imageDiv = document.createElement('div');
                 imageDiv.classList.add('vape-option');
-                if (image.endsWith('.mp4')) {
-                    // Display video
-                    imageDiv.innerHTML = `<video controls><source src="${image}" type="video/mp4">Dein Browser unterstützt das Video-Tag nicht.</video>`;
-                } else {
-                    // Display image
-                    imageDiv.innerHTML = `<img src="${image}" alt="Vape Image">`;
-                }
+                // Display image
+                imageDiv.innerHTML = `<img src="${image}" alt="Vape Image">`;
                 vapeOptionsDiv.appendChild(imageDiv);
             });
         }
