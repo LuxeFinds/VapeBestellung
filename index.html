@@ -37,6 +37,10 @@
             max-width: 300px;
             margin: 10px;
         }
+        .vape-option video {
+            max-width: 300px;
+            margin: 10px;
+        }
         .vape-option h3 {
             color: gold;
         }
@@ -94,9 +98,7 @@
                     "🫐🍇 Blueberry Raspberry"
                 ],
                 images: [
-                    "Bild1_16k.png",
-                    "Bild2_16k.png",
-                    "Bild5_16k.png"  // Angepasst
+                    "Bild5_16k.png" // Nur ein Bild für 16k
                 ]
             },
             "25k": {
@@ -113,8 +115,8 @@
                     "🍋🍒 Lemon Cherry"
                 ],
                 images: [
-                    "Bild4_25k.png",
-                    "Bild5_25k.png"
+                    "Bild4_25k.png", // Bild 1 für 25k
+                    "Video2_25k.mp4" // Video für 25k
                 ]
             },
             "30k": {
@@ -131,9 +133,9 @@
                     "🫐❄️ Blue Razz Ice"
                 ],
                 images: [
-                    "Bild6_30k.png"
+                    "Bild6_30k.png" // Nur ein Bild für 30k
                 ],
-                video: "Video1_30k.mp4"
+                video: "Video1_30k.mp4" // Video für 30k
             },
             "40k": {
                 flavors: [
@@ -149,8 +151,8 @@
                     "🍓🍇 Strawberry Grape"
                 ],
                 images: [
-                    "Bild3_40k.png",
-                    "Bild2_40k.png"
+                    "Bild3_40k.png", // Bild 1 für 40k
+                    "Bild2_40k.png"  // Bild 2 für 40k
                 ]
             }
         };
@@ -172,11 +174,17 @@
 
             const images = vapeData[selectedPuffs].images;
 
-            // Display vape options (images)
+            // Display vape options (images and video)
             images.forEach(image => {
                 const imageDiv = document.createElement('div');
                 imageDiv.classList.add('vape-option');
-                imageDiv.innerHTML = `<img src="${image}" alt="Vape Image">`;
+                if (image.endsWith('.mp4')) {
+                    // Display video
+                    imageDiv.innerHTML = `<video controls><source src="${image}" type="video/mp4">Dein Browser unterstützt das Video-Tag nicht.</video>`;
+                } else {
+                    // Display image
+                    imageDiv.innerHTML = `<img src="${image}" alt="Vape Image">`;
+                }
                 vapeOptionsDiv.appendChild(imageDiv);
             });
         }
