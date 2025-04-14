@@ -3,94 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vape Bestellen</title>
+    <title>Vape Bestellung</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #000000;
+            background-color: #1a1a1a;
             color: #fff;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.7);
+            width: 80%;
+            margin: 20px auto;
+            text-align: center;
         }
         h1 {
-            text-align: center;
             color: gold;
         }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        select, input[type="text"] {
-            width: 100%;
+        select, input, button {
             padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 16px;
             border: 1px solid #ccc;
-        }
-        .submit-btn {
-            background-color: gold;
-            border: none;
-            color: black;
-            padding: 10px 20px;
-            font-size: 18px;
-            width: 100%;
-            cursor: pointer;
             border-radius: 5px;
         }
         .vape-option {
-            background-color: #444;
-            margin-top: 20px;
-            padding: 10px;
+            background-color: #333;
+            padding: 20px;
+            margin: 10px 0;
             border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .vape-option img {
-            width: 200px;
-            margin-bottom: 10px;
+            max-width: 300px;
+            margin: 10px;
         }
-        .vape-option video {
-            width: 200px;
-            margin-bottom: 10px;
+        .vape-option h3 {
+            color: gold;
+        }
+        #order-summary {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Vape Bestellen</h1>
+        <h1>Wähle deine Vape und Geschmack!</h1>
 
-        <form action="https://wa.me/41767069027" method="GET" target="_blank">
-            <label for="puffs">Wähle die Anzahl Puffs:</label>
-            <select name="puffs" id="puffs" required onchange="updateVapeOption()">
-                <option value="16k">16K Puffs - 16,60 €</option>
-                <option value="25k">25K Puffs - 21,80 €</option>
-                <option value="30k">30K Puffs - 25,30 €</option>
-                <option value="40k">40K Puffs - 30,50 €</option>
-            </select>
+        <!-- Puff-Anzahl Auswahl -->
+        <label for="puffs">Wähle die Puff-Anzahl:</label>
+        <select id="puffs" onchange="updateVapeOptions()">
+            <option value="16k">16K Puffs - 16,60 €</option>
+            <option value="25k">25K Puffs - 21,80 €</option>
+            <option value="30k">30K Puffs - 25,30 €</option>
+            <option value="40k">40K Puffs - 30,50 €</option>
+        </select>
 
-            <label for="geschmack">Wähle deinen Geschmack:</label>
-            <select name="geschmack" id="geschmack" required>
-                <!-- Platzhalter, wird dynamisch basierend auf der Puff-Auswahl geändert -->
-            </select>
+        <!-- Geschmacks-Auswahl -->
+        <label for="flavors">Wähle deinen Geschmack:</label>
+        <select id="flavors">
+            <!-- Optionen werden hier per JavaScript generiert -->
+        </select>
 
-            <label for="name">Dein Name:</label>
-            <input type="text" id="name" name="name" placeholder="Gib deinen Namen ein" required>
+        <!-- Name des Benutzers -->
+        <label for="name">Dein Name:</label>
+        <input type="text" id="name" placeholder="Gib deinen Namen ein" required>
 
-            <button type="submit" class="submit-btn">Bestellen</button>
-        </form>
+        <button onclick="submitOrder()">Bestellen</button>
 
-        <div class="vape-option" id="vape-option">
-            <!-- Hier wird das Bild und Video dynamisch eingefügt, je nach Puff-Auswahl -->
+        <!-- Hier werden die Vape-Optionen angezeigt -->
+        <div id="vape-options">
+            <!-- Vape options will be shown here based on selection -->
         </div>
+
+        <div id="order-summary"></div>
     </div>
 
     <script>
@@ -108,8 +93,10 @@
                     "🍓🥝 Strawberry Kiwi",
                     "🫐🍇 Blueberry Raspberry"
                 ],
-                image: "Bild5_16k.png",
-                video: ""
+                images: [
+                    "Bild1_16k.png",
+                    "Bild2_16k.png"
+                ]
             },
             "25k": {
                 flavors: [
@@ -124,8 +111,10 @@
                     "🍉❄️ Watermelon Ice",
                     "🍋🍒 Lemon Cherry"
                 ],
-                image: "Bild4_25k.png",
-                video: "Video2_25k.mp4"
+                images: [
+                    "Bild4_25k.png",
+                    "Bild5_25k.png"
+                ]
             },
             "30k": {
                 flavors: [
@@ -140,36 +129,81 @@
                     "🍉❄️ Watermelon Ice",
                     "🫐❄️ Blue Razz Ice"
                 ],
-                image: "Bild6_30k.png",
+                images: [
+                    "Bild6_30k.png"
+                ],
                 video: "Video1_30k.mp4"
             },
             "40k": {
                 flavors: [
+                    "🍓🍒 Strawberry Cherry Bubblegum",
+                    "🍑🥭🍉 Peach Mango Watermelon",
                     "🍍🍊 Passion Fruit Orange",
+                    "🫐🍋 Blue Razz Lemon",
+                    "🍇🧊 Blueberry Raspberry Ice",
+                    "🍏🍑 Apple Peach Juice",
                     "🍌🍦 Banana Ice Cream",
-                    "🍇🌿 Blackcurrant Menthol"
+                    "🍇🌿 Blackcurrant Menthol",
+                    "🥤❄️ Fizz Cola Ice",
+                    "🍓🍇 Strawberry Grape"
                 ],
-                image: "Bild3_40k.png",
-                video: ""
+                images: [
+                    "Bild3_40k.png",
+                    "Bild2_40k.png"
+                ]
             }
         };
 
-        function updateVapeOption() {
-            const puffs = document.getElementById('puffs').value;
-            const flavorSelect = document.getElementById('geschmack');
-            const vapeOption = document.getElementById('vape-option');
+        function updateVapeOptions() {
+            const selectedPuffs = document.getElementById('puffs').value;
+            const flavorsSelect = document.getElementById('flavors');
+            const vapeOptionsDiv = document.getElementById('vape-options');
+            vapeOptionsDiv.innerHTML = '';
 
-            // Dynamisch die Geschmacksrichtungen basierend auf der Puff-Auswahl setzen
-            const selectedData = vapeData[puffs];
-            flavorSelect.innerHTML = selectedData.flavors.map(flavor => `<option value="${flavor}">${flavor}</option>`).join('');
+            // Populate flavor dropdown
+            flavorsSelect.innerHTML = '';
+            vapeData[selectedPuffs].flavors.forEach(flavor => {
+                const option = document.createElement('option');
+                option.value = flavor;
+                option.textContent = flavor;
+                flavorsSelect.appendChild(option);
+            });
 
-            // Bild und Video anzeigen
-            vapeOption.innerHTML = `
-                <h2>Deine Auswahl: ${puffs} Puffs</h2>
-                <img src="${selectedData.image}" alt="Vape Bild ${puffs}" />
-                ${selectedData.video ? `<video controls><source src="${selectedData.video}" type="video/mp4">Dein Browser unterstützt dieses Video-Format nicht.</video>` : ''}
-            `;
+            const images = vapeData[selectedPuffs].images;
+
+            // Display vape options (images)
+            images.forEach(image => {
+                const imageDiv = document.createElement('div');
+                imageDiv.classList.add('vape-option');
+                imageDiv.innerHTML = `<img src="${image}" alt="Vape Image">`;
+                vapeOptionsDiv.appendChild(imageDiv);
+            });
         }
+
+        function submitOrder() {
+            const selectedPuffs = document.getElementById('puffs').value;
+            const selectedFlavor = document.getElementById('flavors').value;
+            const name = document.getElementById('name').value;
+
+            // Ensure all fields are filled
+            if (!selectedPuffs || !selectedFlavor || !name) {
+                alert('Bitte fülle alle Felder aus!');
+                return;
+            }
+
+            // Prepare the message for WhatsApp
+            const message = encodeURIComponent(
+                `Bestellung: \nName: ${name}\nPuffs: ${selectedPuffs}\nGeschmack: ${selectedFlavor}`
+            );
+
+            const whatsappUrl = `https://wa.me/41767069027?text=${message}`;
+
+            // Redirect to WhatsApp with the prefilled message
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Initialize page with default selection
+        updateVapeOptions();
     </script>
 </body>
 </html>
