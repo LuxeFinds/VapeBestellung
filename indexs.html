@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vape Bestellen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.7);
+        }
+        h1 {
+            text-align: center;
+            color: gold;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .submit-btn {
+            background-color: gold;
+            border: none;
+            color: black;
+            padding: 10px 20px;
+            font-size: 18px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .vape-option {
+            background-color: #444;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .vape-option img {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        .vape-option video {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vape Bestellen</h1>
+
+        <form action="https://wa.me/41767069027" method="GET" target="_blank">
+            <label for="puffs">Wähle die Anzahl Puffs:</label>
+            <select name="puffs" id="puffs" required onchange="updateVapeOption()">
+                <option value="16k">16K Puffs - 16,60 €</option>
+                <option value="25k">25K Puffs - 21,80 €</option>
+                <option value="30k">30K Puffs - 25,30 €</option>
+                <option value="40k">40K Puffs - 30,50 €</option>
+            </select>
+
+            <label for="geschmack">Wähle deinen Geschmack:</label>
+            <select name="geschmack" id="geschmack" required>
+                <!-- Platzhalter, wird dynamisch basierend auf der Puff-Auswahl geändert -->
+            </select>
+
+            <label for="name">Dein Name:</label>
+            <input type="text" id="name" name="name" placeholder="Gib deinen Namen ein" required>
+
+            <button type="submit" class="submit-btn">Bestellen</button>
+        </form>
+
+        <div class="vape-option" id="vape-option">
+            <!-- Hier wird das Bild und Video dynamisch eingefügt, je nach Puff-Auswahl -->
+        </div>
+    </div>
+
+    <script>
+        const vapeData = {
+            "16k": {
+                flavors: [
+                    "🍓🍌 Strawberry Banana",
+                    "🍑🥭🍉 Peach Mango Watermelon",
+                    "🍋🍓 Pink Lemonade",
+                    "🍉❄️ Watermelon Ice",
+                    "🍒🥤 Cherry Cola",
+                    "🍓🍉 Strawberry Watermelon",
+                    "🍇🍓🫐 Mixed Berry",
+                    "🍇🍒 Cranberry Grape",
+                    "🍓🥝 Strawberry Kiwi",
+                    "🫐🍇 Blueberry Raspberry"
+                ],
+                image: "Bild5_16k.png",
+                video: ""
+            },
+            "25k": {
+                flavors: [
+                    "🍇🧊 Blackberry Grape Ice",
+                    "🍓🍉 Strawberry Watermelon",
+                    "🍇🍋 Blueberry Raspberry Lemonade",
+                    "🍇🍒🧊 Mixed Berry Mint",
+                    "🍇❄️ Blueberry Ice",
+                    "🍑🍍 Peach Pineapple Orange",
+                    "🥤🥤 Energy Redbull",
+                    "🍓🥭🍌 Strawberry Mango Banana",
+                    "🍉❄️ Watermelon Ice",
+                    "🍋🍒 Lemon Cherry"
+                ],
+                image: "Bild4_25k.png",
+                video: "Video2_25k.mp4"
+            },
+            "30k": {
+                flavors: [
+                    "🍏🍑 Apple Peach",
+                    "🍉🍈🍓 Triple Melon Berry",
+                    "🍍🍊🥭 Passion Orange Guava",
+                    "🍓🍉 Strawberry Watermelon",
+                    "🫐🍇 Blackberry Raspberry",
+                    "🫐🌿 Blue Raspberry Mint",
+                    "🍒🍌🐉 Dragon Fruit Banana Cherry",
+                    "🍍🥭❄️ Pineapple Mango Ice",
+                    "🍉❄️ Watermelon Ice",
+                    "🫐❄️ Blue Razz Ice"
+                ],
+                image: "Bild6_30k.png",
+                video: "Video1_30k.mp4"
+            },
+            "40k": {
+                flavors: [
+                    "🍍🍊 Passion Fruit Orange",
+                    "🍌🍦 Banana Ice Cream",
+                    "🍇🌿 Blackcurrant Menthol"
+                ],
+                image: "Bild3_40k.png",
+                video: ""
+            }
+        };
+
+        function updateVapeOption() {
+            const puffs = document.getElementById('puffs').value;
+            const flavorSelect = document.getElementById('geschmack');
+            const vapeOption = document.getElementById('vape-option');
+
+            // Dynamisch die Geschmacksrichtungen basierend auf der Puff-Auswahl setzen
+            const selectedData = vapeData[puffs];
+            flavorSelect.innerHTML = selectedData.flavors.map(flavor => `<option value="${flavor}">${flavor}</option>`).join('');
+
+            // Bild und Video anzeigen
+            vapeOption.innerHTML = `
+                <h2>Deine Auswahl: ${puffs} Puffs</h2>
+                <img src="${selectedData.image}" alt="Vape Bild ${puffs}" />
+                ${selectedData.video ? `<video controls><source src="${selectedData.video}" type="video/mp4">Dein Browser unterstützt dieses Video-Format nicht.</video>` : ''}
+            `;
+        }
+    </script>
+</body>
+</html>
